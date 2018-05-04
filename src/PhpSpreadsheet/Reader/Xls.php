@@ -537,6 +537,10 @@ class Xls extends BaseReader
             $code = self::getUInt2d($this->data, $this->pos);
 
             switch ($code) {
+				case self::XLS_TYPE_FILEPASS:
+                    $this->readFilepass();
+					
+					break;
                 case self::XLS_TYPE_BOF:
                     $this->readBof();
 
