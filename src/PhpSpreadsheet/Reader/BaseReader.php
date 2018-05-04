@@ -40,6 +40,14 @@ abstract class BaseReader implements IReader
      */
     protected $loadSheetsOnly;
 
+	/**
+	 * Password used by IReader to open password protected file.
+	 * This property can be overwrite with default value in specific reader.
+	 *
+	 * @var string
+	 */
+    protected $workbookPassword;
+
     /**
      * IReadFilter instance.
      *
@@ -180,7 +188,31 @@ abstract class BaseReader implements IReader
         return $this;
     }
 
-    /**
+	/**
+	 * Get WorkbookPassword.
+	 *
+	 * @return string
+	 */
+	public function getWorkbookPassword()
+	{
+		return $this->workbookPassword;
+	}
+
+	/**
+	 * Set WorkbookPassword. (at this moment used only by Xls Reader
+	 *
+	 * @param string $password
+	 *
+	 * @return IReader
+	 */
+	public function setWorkbookPassword($password)
+	{
+		$this->workbookPassword = $password;
+
+		return $this;
+	}
+
+	/**
      * Read filter.
      *
      * @return IReadFilter

@@ -150,6 +150,14 @@ class Xls extends BaseReader
     // Size of stream blocks when using RC4 encryption
     const REKEY_BLOCK = 0x400;
 
+	/**
+	 * Password used by IReader to open password protected file.
+	 * This property can be overvirete with default value in specific reader.
+	 *
+	 * @var string
+	 */
+	protected $workbookPassword = 'VelvetSweatshop';
+
     /**
      * Summary Information stream data.
      *
@@ -1824,16 +1832,17 @@ class Xls extends BaseReader
     {
         $length = self::getUInt2d($this->data, $this->pos + 2);
 
-        if ($length != 54) {
-            throw new Exception('Unexpected file pass record length');
+        if ($length != 54 and $length != 200) {
+            throw new Exception('Unexpected file pass record length ' . $length);
         }
 
+		$length = 54;
         $recordData = $this->readRecordData($this->data, $this->pos + 4, $length);
 
         // move stream pointer to next record
         $this->pos += 4 + $length;
 
-        if (!$this->verifyPassword('VelvetSweatshop', substr($recordData, 6, 16), substr($recordData, 22, 16), substr($recordData, 38, 16), $this->md5Ctxt)) {
+        if (!$this->verifyPassword($this->getWorkbookPassword(), substr($recordData, 6, 16), substr($recordData, 22, 16), substr($recordData, 38, 16), $this->md5Ctxt)) {
             throw new Exception('Decryption password incorrect');
         }
 
